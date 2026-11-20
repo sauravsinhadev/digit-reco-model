@@ -4,7 +4,7 @@
 import json
 import os
 import random
-datastructure={"layershape":{"hidweight":[784,120],"hidenbies":[128,1],"outputbaies":[10,1],"outputweight":[128,10]},"layerdata":{"hidweight":[],"hidenbies":[],"outputbaies":[],"outputweight":[]}}
+datastructure={"layershape":{"hidweight":[128,784],"hidenbies":[128,1],"outputbaies":[10,1],"outputweight":[10,128]},"layerdata":{"hidweight":[],"hidenbies":[],"outputbaies":[],"outputweight":[]}}
 
 DIR="./data"
 MODAL=DIR+"/model/sak.json"
@@ -43,7 +43,7 @@ updatefile(MODAL,datastructure)
 getstr=dict(json.loads(readfile(MODAL)))
 
 for key  in getstr["layershape"]:
-    for i in range(1,int(getstr["layershape"][key][0])):
+    for i in range(1,int(getstr["layershape"][key][0])+1):
          
          if "b" in key:
              getstr["layerdata"][key].append(random_bias())

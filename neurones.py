@@ -2,6 +2,16 @@
 
 #784 input processs 128 wx+b # output layer 10 output with wx+b
 import random
+import json
+DIR="./data"
+MODAL=DIR+"/model/sak.json"
+TRAINDATA=DIR+"/traindata"
+
+def readfile(nameoffile):
+    with open(nameoffile,"r") as file:
+        return file.read()
+
+
 
 def randominput():
     return random.randint(0,1)
@@ -51,6 +61,36 @@ print(b)
 print(w)    
 
 print(neurones(v,b,w,True))
+
+
+def genrateoutput(input):
+    data=dict(json.loads(readfile(MODAL)))
+#{"hidweight":[],"hidenbies":[],"outputbaies":[],"outputweight":[]}
+    #print(data)
+    hweight=data["layerdata"]["hidweight"]
+    print(len(hweight))
+    hbais=data["layerdata"]["hidenbies"]
+    obais=data["layerdata"]["outputbaies"]
+    oweight=data["layerdata"]["outputweight"]
+
+    oinput=neurones(input,hbais,hweight,True)
+    output=neurones(oinput,obais,oweight,False)
+    print(output)
+    cof=max(output)
+    ans=output.index(cof)
+    ##softmax
+    
+    return {"confidence":cof*100,"ans":ans}
+
+
+print(genrateoutput(falseinput(784)))
+
+
+
+
+
+
+
 
 
 
