@@ -1,0 +1,26 @@
+{
+    "layershape": {
+        "hidweight": [
+            720,
+            120
+        ],
+        "hidenbies": [
+            128,
+            1
+        ],
+        "outputbaies": [
+            128,
+            10
+        ],
+        "outputweight": [
+            10,
+            1
+        ]
+    },
+    "layerdata": {
+        "hidweight": [],
+        "hidenbies": [],
+        "outputbaies": [],
+        "outputweight": []
+    }
+}
