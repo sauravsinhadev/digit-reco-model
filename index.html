@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>`substitute(Filename('', 'Page Title'), '^.', '\u&', '')`</title>
+        
+    </head>
+    <body>
+        <script src="https://cloudflare.com"></script>
+
+        <div id="main" class="main" >
+            <button onclick="get28x28List()">getlist</button>
+            
+        </div>
+        <canvas id="pad" width="280" height="280" style="border:1px solid #333; touch-action:none;"></canvas>
+
+<script>
+
+
+  const canvas = document.getElementById('pad');
+  const ctx = canvas.getContext('2d');
+
+  // White background + thick smooth black pen
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, 280, 280);
+  ctx.lineWidth = 20;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = 'black';
+
+  let drawing = false;
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches ? e.touches : e;
+    return {
+      x: touch.clientX - rect.left,
+      y: touch.clientY - rect.top
+    };
+  }
+
+  function start(e) {
+    e.preventDefault();
+    drawing = true;
+    const pos = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  }
+
+  function move(e) {
+    if (!drawing) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  }
+
+  function end() {
+    if (!drawing) return;
+    drawing = false;
+    console.log(get28x28List()); // Outputs your 28x28 array of 0s and 1s
+  }
+
+  // Touch & Mouse events
+  canvas.addEventListener('touchstart', start, { passive: false });
+  canvas.addEventListener('touchmove', move, { passive: false });
+  canvas.addEventListener('touchend', end);
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+
+  // Downsample 280x280 canvas into a 28x28 list of 0s and 1s
+  function get28x28List() {
+    const small = document.createElement('canvas');
+    small.width = 28;
+    small.height = 28;
+    const sCtx = small.getContext('2d');
+    sCtx.drawImage(canvas, 0, 0, 28, 28);
+
+    const imgData = sCtx.getImageData(0, 0, 28, 28).data;
+    let gridList = [];
+
+    for (let r = 0; r < 28; r++) {
+      let row = [];
+      for (let c = 0; c < 28; c++) {
+        // Check Red channel (0 = black, 255 = white)
+        const red = imgData[(r * 28 + c) * 4];
+        row.push(red < 128 ? 1 : 0);
+      }
+      gridList.push(row);
+    }
+    document.getElementById('main').innerText=gridList;
+    return gridList;
+  }
+
+
+</script>
+        
+    </body>
+</html>
